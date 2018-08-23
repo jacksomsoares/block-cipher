@@ -10,6 +10,10 @@ MainWindow::MainWindow(QWidget *parent) :
     textOriginal = ui->ptext_msg;
     textCriptogrado = ui->ptext_msg_crypt;
 
+    QString teste = "Hello World!";
+    QList<QByteArray> a = gerarListaBlocos(teste.toLatin1());
+    printListaBlocos(a);
+
 }
 
 MainWindow::~MainWindow()

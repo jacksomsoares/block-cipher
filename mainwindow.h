@@ -8,6 +8,7 @@
 #include <QSpinBox>
 #include <QList>
 
+#include "mycrypt.h"
 
 #include <QDebug>
 
