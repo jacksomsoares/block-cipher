@@ -7,10 +7,9 @@
 #include <QByteArray>
 #include <QSpinBox>
 #include <QList>
-
-#include "mycrypt.h"
-
 #include <QDebug>
+
+#include "simplecipher.h"
 
 namespace Ui {
 class MainWindow;

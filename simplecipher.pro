@@ -24,11 +24,12 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    simplecipher.cpp
 
 HEADERS += \
         mainwindow.h \
-    mycrypt.h
+    simplecipher.h
 
 FORMS += \
         mainwindow.ui
