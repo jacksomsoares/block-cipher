@@ -9,14 +9,19 @@ MainWindow::MainWindow(QWidget *parent) :
 
     textOriginal = ui->ptext_msg;
     textCriptogrado = ui->ptext_msg_crypt;
-
+    /*
     QDebug qdebug = qDebug().nospace().noquote();
-    char c = 'f';
-    for(int i = 0; i < 64; i++)
+    char c = (char)255;
+    for(int i = 0; i < 16; i++)
     {
         if(i % 8 == 0) qdebug << " ";
-        qdebug << valorBit(c, 64-i);
+        qdebug << valorBit(c, 16-i);
     }
+    */
+    QList<QByteArray> x;
+    x.append(QByteArray(TAM_BLOCO, (char)255));
+    x = realizarPermutacao(x);
+    printListaBlocos(x);
     /*
     QString teste = "Hello World!";
     QList<QByteArray> a = gerarListaBlocos(teste.toLatin1());
