@@ -32,10 +32,6 @@ private:
 
     QPlainTextEdit* textOriginal;
     QPlainTextEdit* textCriptogrado;
-
-    QList<QByteArray> realizarPermutacao(QList<QByteArray> list);
-    QList<QByteArray> desfazerPermutacao(QList<QByteArray> list);
-    QList<QByteArray> dividirEmBlocos(QString str);
     QByteArray pegarChave();
 };
 

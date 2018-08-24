@@ -37,50 +37,93 @@ void printListaBlocos(QList<QByteArray> input)
 {
     for(int i = 0; i < input.size(); i++)
     {
-        QDebug qdebug = qDebug();
+        QString string;
         for(int j = 0; j < input[i].size(); j++)
         {
-            for(int m = 8; m < 0; m--)
+            for(int m = 7; m >= 0; m--)
             {
-                qdebug << valorBit(input[i][j], m);
+                string.append(QString::number(valorBit(input[i][j], m)));
             }
+            string.append(" ");
         }
-        qdebug << " ";
+        qDebug().noquote() << string;
     }
-    /*
-    foreach(QByteArray x, input)
-    {
-        //qDebug() << x << x.size();
-        foreach(char y, x)
-        {
-
-        }
-    }
-    */
 }
 
 QList<QByteArray> realizarPermutacaoInicial(QList<QByteArray> input)
 {
     QList<QByteArray> output;
-    //for(int i = 0; i < input.size(); i++) output.append(QByteArray(TAM_BLOCO, (char)0));
     foreach(QByteArray x, input)
     {
         QByteArray y(x.size(), (char)0);
-
         int drift = -1;
-        for(int i = 0; i < input.size(); i++)
+        int driftCounter = 0;
+        int secondStepCounter = -1;
+        for(int i = 0; i < x.size(); i++)
         {
-            int oByte = i / 8;
-            int oBit = i % 8;
-            if(i % DRIFT_PERM_INI == 0) drift += 1;
-            int dByte = (i + drift) / 8;
-            int dBit = (i + drift) % 8;
-
-            if(valorBit(x[oByte], 7 - oBit) != 0)
+            for(int m = 7; m >= 0; m--)
             {
-                y[dByte] = setBit(y[dByte], 7 - dBit);
+                if(driftCounter % DRIFT_PERM_INI == 0) drift++;
+                driftCounter++;
+                int oByte = i;
+                int oBit = m;
+                int dByte = i + (((7 - m) + drift) / 8);
+                int dBit = (m - drift) % 8;
+                if(dBit < 0) dBit = 8 + dBit;
+                if(dByte >= y.size())
+                {
+                    secondStepCounter += DRIFT_PERM_INI + 1;
+                    dByte = secondStepCounter / 8;
+                    dBit = 7 - (secondStepCounter % 8);
+                    //qDebug() << dByte << dBit;
+                }
+                //qDebug() << drift << "|" << oByte << oBit << "|" << dByte << dBit;
+                if(valorBit(x[oByte], oBit) != 0)
+                {
+                    y[dByte] = setBit(y[dByte], dBit);
+                }
             }
         }
         output.append(y);
     }
+    return output;
+}
+
+QList<QByteArray> desfazerPermutacaoInicial(QList<QByteArray> input)
+{
+    QList<QByteArray> output;
+    foreach(QByteArray x, input)
+    {
+        QByteArray y(x.size(), (char)0);
+        int drift = -1;
+        int driftCounter = 0;
+        int secondStepCounter = -1;
+        for(int i = 0; i < x.size(); i++)
+        {
+            for(int m = 7; m >= 0; m--)
+            {
+                if(driftCounter % DRIFT_PERM_INI == 0) drift++;
+                driftCounter++;
+                int oByte = i;
+                int oBit = m;
+                int dByte = i + (((7 - m) + drift) / 8);
+                int dBit = (m - drift) % 8;
+                if(dBit < 0) dBit = 8 + dBit;
+                if(dByte >= y.size())
+                {
+                    secondStepCounter += DRIFT_PERM_INI + 1;
+                    dByte = secondStepCounter / 8;
+                    dBit = 7 - (secondStepCounter % 8);
+                    //qDebug() << dByte << dBit;
+                }
+                //qDebug() << drift << "|" << dByte << dBit << "|" << oByte << oBit;
+                if(valorBit(x[dByte], dBit) != 0)
+                {
+                    y[oByte] = setBit(y[oByte], oBit);
+                }
+            }
+        }
+        output.append(y);
+    }
+    return output;
 }

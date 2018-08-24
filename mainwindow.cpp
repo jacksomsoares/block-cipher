@@ -18,15 +18,23 @@ MainWindow::MainWindow(QWidget *parent) :
         qdebug << valorBit(c, 16-i);
     }
     */
+
     QList<QByteArray> x;
-    x.append(QByteArray(TAM_BLOCO, (char)255));
-    x = realizarPermutacao(x);
+    x.append(QByteArray(TAM_BLOCO, (char)79));
+    //x = realizarPermutacao(x);
     printListaBlocos(x);
+    printListaBlocos(realizarPermutacaoInicial(x));
+    printListaBlocos(desfazerPermutacaoInicial(x));
+
+    //qDebug() << QString::number((int)'f', 2);
+
     /*
     QString teste = "Hello World!";
     QList<QByteArray> a = gerarListaBlocos(teste.toLatin1());
     printListaBlocos(a);
     */
+
+
 }
 
 MainWindow::~MainWindow()
@@ -36,6 +44,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_button_crypt_pressed()
 {
+    /*
     pegarChave();
     QString original = textOriginal->toPlainText();
     QList<QByteArray> blocos = dividirEmBlocos(original);
@@ -46,6 +55,7 @@ void MainWindow::on_button_crypt_pressed()
     }
     textCriptogrado->clear();
     textCriptogrado->appendPlainText(final);
+    */
 }
 
 void MainWindow::on_button_decrypt_pressed()
@@ -54,46 +64,6 @@ void MainWindow::on_button_decrypt_pressed()
     QString original = QString(QByteArray::fromHex(final.toLatin1()));
     textOriginal->clear();
     textOriginal->appendPlainText(original);
-}
-
-QList<QByteArray> MainWindow::dividirEmBlocos(QString str)
-{
-    QList<QByteArray> output;
-    int i = 0;
-    int step = 4;
-    while(i < str.size())
-    {
-        QByteArray a = str.mid(i, step).toLatin1();
-        while(a.size() < step) a.append((char)0);
-        qDebug() << a << a.size();
-        output.append(a);
-        i += step;
-    }
-    return output;
-}
-
-QList<QByteArray> MainWindow::realizarPermutacao(QList<QByteArray> list)
-{
-    for(int i = 0; i < list.size(); i++)
-    {
-        QByteArray a = list[i];
-        QByteArray b;
-        b.append(a[1]).append(a[2]).append(a[3]).append(a[0]);
-        list[i] = b;
-    }
-    return list;
-}
-
-QList<QByteArray> MainWindow::desfazerPermutacao(QList<QByteArray> list)
-{
-    for(int i = 0; i < list.size(); i++)
-    {
-        QByteArray a = list[i];
-        QByteArray b;
-        b.append(a[3]).append(a[0]).append(a[1]).append(a[2]);
-        list[i] = b;
-    }
-    return list;
 }
 
 QByteArray MainWindow::pegarChave()
