@@ -72,6 +72,7 @@ QList<QByteArray> realizarPermutacaoInicial(QList<QByteArray> input)
                 if(dBit < 0) dBit = 8 + dBit;
                 if(dByte >= y.size())
                 {
+                    //break;
                     secondStepCounter += DRIFT_PERM_INI + 1;
                     dByte = secondStepCounter / 8;
                     dBit = 7 - (secondStepCounter % 8);
@@ -111,6 +112,7 @@ QList<QByteArray> desfazerPermutacaoInicial(QList<QByteArray> input)
                 if(dBit < 0) dBit = 8 + dBit;
                 if(dByte >= y.size())
                 {
+                    //break;
                     secondStepCounter += DRIFT_PERM_INI + 1;
                     dByte = secondStepCounter / 8;
                     dBit = 7 - (secondStepCounter % 8);

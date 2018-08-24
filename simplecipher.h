@@ -31,6 +31,6 @@ QList<QByteArray> desfazerPermutacaoInicial(QList<QByteArray> input);
 
 // expandir chave
 
-// aplicar uma 'rodada' (
+// aplicar uma 'rodada'
 
 #endif // SIMPLECIPHER_H

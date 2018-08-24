@@ -9,32 +9,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     textOriginal = ui->ptext_msg;
     textCriptogrado = ui->ptext_msg_crypt;
-    /*
-    QDebug qdebug = qDebug().nospace().noquote();
-    char c = (char)255;
-    for(int i = 0; i < 16; i++)
-    {
-        if(i % 8 == 0) qdebug << " ";
-        qdebug << valorBit(c, 16-i);
-    }
-    */
 
     QList<QByteArray> x;
-    x.append(QByteArray(TAM_BLOCO, (char)79));
-    //x = realizarPermutacao(x);
+    x.append(QByteArray(TAM_BLOCO, (char)255));
     printListaBlocos(x);
     printListaBlocos(realizarPermutacaoInicial(x));
     printListaBlocos(desfazerPermutacaoInicial(x));
-
-    //qDebug() << QString::number((int)'f', 2);
-
-    /*
-    QString teste = "Hello World!";
-    QList<QByteArray> a = gerarListaBlocos(teste.toLatin1());
-    printListaBlocos(a);
-    */
-
-
 }
 
 MainWindow::~MainWindow()
@@ -60,10 +40,12 @@ void MainWindow::on_button_crypt_pressed()
 
 void MainWindow::on_button_decrypt_pressed()
 {
+    /*
     QString final = textCriptogrado->toPlainText();
     QString original = QString(QByteArray::fromHex(final.toLatin1()));
     textOriginal->clear();
     textOriginal->appendPlainText(original);
+    */
 }
 
 QByteArray MainWindow::pegarChave()
