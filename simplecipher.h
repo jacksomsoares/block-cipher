@@ -27,6 +27,9 @@ void printListaBlocos(QList<QByteArray> input);
 QList<QByteArray> realizarPermutacaoInicial(QList<QByteArray> input);
 QList<QByteArray> desfazerPermutacaoInicial(QList<QByteArray> input);
 
+//Realiza swap
+QByteArray swapper(QByteArray inputBlock);
+
 // realizar/desfazer permutacao final
 
 // expandir chave

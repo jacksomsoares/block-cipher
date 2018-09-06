@@ -1,9 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
 
@@ -15,6 +13,11 @@ MainWindow::MainWindow(QWidget *parent) :
     printListaBlocos(x);
     printListaBlocos(realizarPermutacaoInicial(x));
     printListaBlocos(desfazerPermutacaoInicial(x));
+
+
+    QByteArray bArray("abcd");
+    qDebug() << QString(swapper(bArray));
+
 }
 
 MainWindow::~MainWindow()

@@ -129,3 +129,11 @@ QList<QByteArray> desfazerPermutacaoInicial(QList<QByteArray> input)
     }
     return output;
 }
+
+QByteArray swapper(QByteArray inputBlock){
+    QByteArray output;
+    output.append(inputBlock.right(TAM_BLOCO/2));
+    output.append(inputBlock.left(TAM_BLOCO/2));
+
+    return output;
+}
