@@ -30,6 +30,9 @@ QList<QByteArray> desfazerPermutacaoInicial(QList<QByteArray> input);
 //Realiza swap
 QByteArray swapper(QByteArray inputBlock);
 
+//Realiza o mix
+QByteArray mixer(QByteArray L, QByteArray R);
+
 // realizar/desfazer permutacao final
 
 // expandir chave

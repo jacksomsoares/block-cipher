@@ -137,3 +137,7 @@ QByteArray swapper(QByteArray inputBlock){
 
     return output;
 }
+
+QByteArray mixer(QByteArray L, QByteArray R) {
+
+}
