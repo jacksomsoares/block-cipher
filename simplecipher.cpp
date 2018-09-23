@@ -1,21 +1,21 @@
 #include "simplecipher.h"
 
-int valorBit(int valor, int posicao)
+char valorBit(char valor, int posicao)
 {
     return (valor & (1 << posicao)) >> posicao;
 }
 
-int setBit(int valor, int posicao)
+char setBit(char valor, int posicao)
 {
     return valor | (1 << posicao);
 }
 
-int resetBit(int valor, int posicao)
+char resetBit(char valor, int posicao)
 {
     return valor & ~(1 << posicao);
 }
 
-QList<QByteArray> gerarListaBlocos(QByteArray input)
+QList<QByteArray> breakIntoBlocks(QByteArray input)
 {
     QList<QByteArray> output;
     int i = 0;
@@ -33,7 +33,7 @@ QList<QByteArray> gerarListaBlocos(QByteArray input)
     return output;
 }
 
-void printListaBlocos(QList<QByteArray> input)
+void printBlockList(QList<QByteArray> input)
 {
     for(int i = 0; i < input.size(); i++)
     {
@@ -50,7 +50,7 @@ void printListaBlocos(QList<QByteArray> input)
     }
 }
 
-QList<QByteArray> realizarPermutacaoInicial(QList<QByteArray> input)
+QList<QByteArray> doPermutation(QList<QByteArray> input)
 {
     QList<QByteArray> output;
     foreach(QByteArray x, input)
@@ -72,16 +72,14 @@ QList<QByteArray> realizarPermutacaoInicial(QList<QByteArray> input)
                 if(dBit < 0) dBit = 8 + dBit;
                 if(dByte >= y.size())
                 {
-                    //break;
                     secondStepCounter += DRIFT_PERM_INI + 1;
                     dByte = secondStepCounter / 8;
                     dBit = 7 - (secondStepCounter % 8);
-                    //qDebug() << dByte << dBit;
                 }
-                //qDebug() << drift << "|" << oByte << oBit << "|" << dByte << dBit;
                 if(valorBit(x[oByte], oBit) != 0)
                 {
                     y[dByte] = setBit(y[dByte], dBit);
+                    //qDebug().noquote() << oByte << "[" << oBit << "]  -> " << dByte << "[" << dBit << "]";
                 }
             }
         }
@@ -90,7 +88,7 @@ QList<QByteArray> realizarPermutacaoInicial(QList<QByteArray> input)
     return output;
 }
 
-QList<QByteArray> desfazerPermutacaoInicial(QList<QByteArray> input)
+QList<QByteArray> undoPermutation(QList<QByteArray> input)
 {
     QList<QByteArray> output;
     foreach(QByteArray x, input)
@@ -112,16 +110,14 @@ QList<QByteArray> desfazerPermutacaoInicial(QList<QByteArray> input)
                 if(dBit < 0) dBit = 8 + dBit;
                 if(dByte >= y.size())
                 {
-                    //break;
                     secondStepCounter += DRIFT_PERM_INI + 1;
                     dByte = secondStepCounter / 8;
                     dBit = 7 - (secondStepCounter % 8);
-                    //qDebug() << dByte << dBit;
                 }
-                //qDebug() << drift << "|" << dByte << dBit << "|" << oByte << oBit;
                 if(valorBit(x[dByte], dBit) != 0)
                 {
                     y[oByte] = setBit(y[oByte], oBit);
+                    //qDebug().noquote() << oByte << "[" << oBit << "]  <- " << dByte << "[" << dBit << "]";
                 }
             }
         }
@@ -141,9 +137,15 @@ QByteArray swapper(QByteArray inputBlock)
 
 void chiperRound(QByteArray& blockLeft, QByteArray& blockRight)
 {
-    //Aply function on the right side. Use ref (&) to avoid instanciation new objects
+    //fazer função para expandir a chave para o tamanho do bloco
+
+    //Apply function on the right side. Use ref (&) to avoid instanciation new objects
     for(int index=0; index<TAM_BLOCO/2; index++)
     {
+        //desenvolver funções para:
+        //1: aplicar XOR entre o bloco e a chave
+        //2: aplicar XOR entre os dois lados do bloco
+        //3: outras etapas opcionais (?)
         //blockLeft[index] = blockLeft[index] ^ blockRight[index];
     }
 
@@ -154,7 +156,7 @@ void chiperRound(QByteArray& blockLeft, QByteArray& blockRight)
 
 }
 
-QByteArray encrypt(const QByteArray& plainText)
+QByteArray encrypt(const QByteArray& plainText) //PERGUNTA: O plaintext não deveria ser em QString?
 {
     //Do Initial permutation in whole Text
     QByteArray permutedText(plainText);
@@ -162,13 +164,34 @@ QByteArray encrypt(const QByteArray& plainText)
         permutedText.append(TAM_BLOCO - (permutedText.size()%TAM_BLOCO),' '); //Modify the size of the message be compatible with the block size
     }
 
+    //jeito do Filipe - TESTAR
+    /*
+    QList<QByteArray> blockList = breakIntoBlocks(permutedText);
+    QList<QByteArray> resultBlockList;
+    foreach(QByteArray block, blockList)
+    {
+        QByteArray blockLeft;
+        QByteArray blockRight;
+        blockLeft = block.left(block.size()/2);
+        blockRight = block.right(block.size()/2);
+
+        for (int round=0; round<QTD_ROUNDS; round++) //Rounds Loop
+        {
+            chiperRound(blockLeft, blockRight);
+        }
+        QByteArray resultBlock = .append(blockLeft)
+        resultBlock.append(blockLeft);
+        resultBlock.append(blockRight);
+        resultBlockList.append(resultBlock);
+    }
+    */
+
+    //jeito do Jacksom
     QByteArray block;
     QByteArray blockLeft;
     QByteArray blockRight;
-
     QByteArray encryptedText;
-
-    for (int index=0; index<permutedText.size()-1; index+=TAM_BLOCO) //Block Loop
+    for (int index=0; index<permutedText.size(); index+=TAM_BLOCO) //Block Loop
     {
         block = permutedText.mid(index, TAM_BLOCO);
         blockLeft = block.left(block.size()/2);
