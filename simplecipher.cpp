@@ -25,7 +25,7 @@ QList<QByteArray> gerarListaBlocos(QByteArray input)
         for(int j = 0; j < TAM_BLOCO; j++)
         {
             if((i+j) < input.size()) x.append(input[i+j]);
-            else x.append((char)0);
+            else x.append(static_cast<char>(0));
         }
         output.append(x);
         i += TAM_BLOCO;
@@ -55,7 +55,7 @@ QList<QByteArray> realizarPermutacaoInicial(QList<QByteArray> input)
     QList<QByteArray> output;
     foreach(QByteArray x, input)
     {
-        QByteArray y(x.size(), (char)0);
+        QByteArray y(x.size(), static_cast<char>(0));
         int drift = -1;
         int driftCounter = 0;
         int secondStepCounter = -1;
@@ -95,7 +95,7 @@ QList<QByteArray> desfazerPermutacaoInicial(QList<QByteArray> input)
     QList<QByteArray> output;
     foreach(QByteArray x, input)
     {
-        QByteArray y(x.size(), (char)0);
+        QByteArray y(x.size(), static_cast<char>(0));
         int drift = -1;
         int driftCounter = 0;
         int secondStepCounter = -1;
@@ -130,7 +130,8 @@ QList<QByteArray> desfazerPermutacaoInicial(QList<QByteArray> input)
     return output;
 }
 
-QByteArray swapper(QByteArray inputBlock){
+QByteArray swapper(QByteArray inputBlock)
+{
     QByteArray output;
     output.append(inputBlock.right(TAM_BLOCO/2));
     output.append(inputBlock.left(TAM_BLOCO/2));
@@ -138,6 +139,73 @@ QByteArray swapper(QByteArray inputBlock){
     return output;
 }
 
-QByteArray mixer(QByteArray L, QByteArray R) {
+void chiperRound(QByteArray& blockLeft, QByteArray& blockRight)
+{
+    //Aply function on the right side. Use ref (&) to avoid instanciation new objects
+    for(int index=0; index<TAM_BLOCO/2; index++)
+    {
+        //blockLeft[index] = blockLeft[index] ^ blockRight[index];
+    }
+
+    //swapp sides
+    QByteArray swapAux = blockLeft;
+    blockLeft = blockRight;
+    blockRight = swapAux;
 
 }
+
+QByteArray encrypt(const QByteArray& plainText)
+{
+    //Do Initial permutation in whole Text
+    QByteArray permutedText(plainText);
+    if ((permutedText.size()%TAM_BLOCO) > 0){
+        permutedText.append(TAM_BLOCO - (permutedText.size()%TAM_BLOCO),' '); //Modify the size of the message be compatible with the block size
+    }
+
+    QByteArray block;
+    QByteArray blockLeft;
+    QByteArray blockRight;
+
+    QByteArray encryptedText;
+
+    for (int index=0; index<permutedText.size()-1; index+=TAM_BLOCO) //Block Loop
+    {
+        block = permutedText.mid(index, TAM_BLOCO);
+        blockLeft = block.left(block.size()/2);
+        blockRight = block.right(block.size()/2);
+
+        for (int round=0; round<QTD_ROUNDS; round++) //Rounds Loop
+        {
+            chiperRound(blockLeft, blockRight);
+        }
+        encryptedText.append(blockLeft);
+        encryptedText.append(blockRight);
+    }
+
+    //Do final permutation before return
+    return encryptedText;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

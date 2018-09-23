@@ -11,6 +11,7 @@
 #define TAM_CHAVE 2
 #define DRIFT_PERM_INI 3
 #define DRIFT_PERM_FIN 3
+#define QTD_ROUNDS 1
 
 // operacoes bit-a-bit
 int valorBit(int valor, int posicao);
@@ -30,8 +31,9 @@ QList<QByteArray> desfazerPermutacaoInicial(QList<QByteArray> input);
 //Realiza swap
 QByteArray swapper(QByteArray inputBlock);
 
-//Realiza o mix
-QByteArray mixer(QByteArray L, QByteArray R);
+//Funcoes de encriptacao
+QByteArray encrypt(const QByteArray& plainText);
+void chiperRound(QByteArray& blockLeft, QByteArray& blockRight);
 
 // realizar/desfazer permutacao final
 

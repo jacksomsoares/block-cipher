@@ -14,28 +14,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     printListaBlocos(realizarPermutacaoInicial(x));
     printListaBlocos(desfazerPermutacaoInicial(x));
 
+    //Teste Enctypt
+    QByteArray plainText("ana rayar");
+    QByteArray encryptedText = encrypt(plainText);
+    QByteArray decryptedText = encrypt(encryptedText);
 
-    //Testes swapper
-    QByteArray bArray("ana rayar");
-    bArray.append(TAM_BLOCO - (bArray.size()%TAM_BLOCO),'-'); //This will add a quantity of spaces to the end of the string to be compatible
-    QByteArray bArrayReverse;
-    QByteArray bArrayTest;
-
-    for (int index=0; index<bArray.size()-1; index+=TAM_BLOCO) {
-        QByteArray b2 = bArray.mid(index, TAM_BLOCO);
-        bArrayReverse.append(swapper(b2));
-    }
-
-    qDebug() << bArray;
-    qDebug() << bArrayReverse;
-
-    for (int index=0; index<bArrayReverse.size()-1; index+=TAM_BLOCO) {
-        QByteArray b2 = bArrayReverse.mid(index, TAM_BLOCO);
-        bArrayTest.append(swapper(b2));
-    }
-
-    qDebug() << bArrayTest;
-    //Fim testes swapper
+    qDebug() << decryptedText;
 
 }
 
