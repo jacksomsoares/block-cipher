@@ -13,7 +13,7 @@
 #define TAM_CHAVE 2
 #define DRIFT_PERM_INI 3
 #define DRIFT_PERM_FIN 3
-#define QTD_ROUNDS 1
+#define QTD_ROUNDS 10
 
 // operacoes bit-a-bit
 char valorBit(char valor, int posicao);
@@ -24,11 +24,12 @@ char resetBit(char valor, int posicao);
 QList<QByteArray> breakIntoBlocks(QByteArray input);
 
 // print lista de blocos
+void printBlock(QByteArray input);
 void printBlockList(QList<QByteArray> input);
 
 // realizar/desfazer permutacao
-QList<QByteArray> doPermutation(QList<QByteArray> input);
-QList<QByteArray> undoPermutation(QList<QByteArray> input);
+QList<QByteArray> doPermutation(QList<QByteArray> input, int drift = -1);
+QList<QByteArray> undoPermutation(QList<QByteArray> input, int drift = -1);
 
 //Funcoes de encriptacao
 QByteArray encrypt(QByteArray input, QByteArray key);
@@ -40,5 +41,6 @@ QByteArray simpleResize(QByteArray input, int size);
 
 // aplicar uma 'rodada'
 QByteArray cipherRound(QByteArray block, QByteArray key);
+QByteArray decipherRound(QByteArray block, QByteArray key);
 
 #endif // SIMPLECIPHER_H
