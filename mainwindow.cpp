@@ -9,10 +9,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     textCriptogrado = ui->ptext_msg_crypt;
 
     QList<QByteArray> x;
-    x.append(QByteArray(TAM_BLOCO, (char)255));
-    printListaBlocos(x);
-    printListaBlocos(realizarPermutacaoInicial(x));
-    printListaBlocos(desfazerPermutacaoInicial(x));
+    x.append(QByteArray(TAM_BLOCO, (char)130));
+    qDebug().noquote().nospace() << "ORIGINAL:";
+    printBlockList(x);
+    QList<QByteArray> x1 = doPermutation(x);
+    qDebug().noquote().nospace() << "PERMUTADO:";
+    printBlockList(x1);
+    QList<QByteArray> x2 = undoPermutation(x1);
+    qDebug().noquote().nospace() << "DES-PERMUTADO:";
+    printBlockList(x2);
 
     //Teste Enctypt
     QByteArray plainText("ana rayar");
