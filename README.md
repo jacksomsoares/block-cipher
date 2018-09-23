@@ -1,4 +1,4 @@
-# Trabalho 1 aula Seguranda da Informação - block cipher
+# Trabalho 1 - Segurança da Informação - Feistel Block Cipher
 
 Elaborado por Jacksom E. Soares e Filipe Nascimento
 
