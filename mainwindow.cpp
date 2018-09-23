@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     textOriginal = ui->ptext_msg;
     textCriptogrado = ui->ptext_msg_crypt;
-
+    /*
     QList<QByteArray> x;
     x.append(QByteArray(TAM_BLOCO, (char)130));
     qDebug().noquote().nospace() << "ORIGINAL:";
@@ -18,14 +18,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     QList<QByteArray> x2 = undoPermutation(x1);
     qDebug().noquote().nospace() << "DES-PERMUTADO:";
     printBlockList(x2);
+    */
 
-    //Teste Enctypt
-    QByteArray plainText("ana rayar");
-    QByteArray encryptedText = encrypt(plainText);
-    QByteArray decryptedText = encrypt(encryptedText);
-
+    //Teste Encrypt
+    QByteArray key("affs");
+    QByteArray plainText(QString("ana rayar").toLatin1());
+    qDebug() << plainText;
+    QByteArray encryptedText = encrypt(plainText, key);
+    qDebug() << encryptedText;
+    QByteArray decryptedText = decrypt(encryptedText, key);
     qDebug() << decryptedText;
-
 }
 
 MainWindow::~MainWindow()

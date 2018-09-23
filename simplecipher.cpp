@@ -33,6 +33,16 @@ QList<QByteArray> breakIntoBlocks(QByteArray input)
     return output;
 }
 
+QByteArray joinBlocks(QList<QByteArray> input)
+{
+    QByteArray output;
+    foreach(QByteArray x, input)
+    {
+        output.append(x);
+    }
+    return output;
+}
+
 void printBlockList(QList<QByteArray> input)
 {
     for(int i = 0; i < input.size(); i++)
@@ -126,37 +136,105 @@ QList<QByteArray> undoPermutation(QList<QByteArray> input)
     return output;
 }
 
-QByteArray swapper(QByteArray inputBlock)
+QByteArray simpleResize(QByteArray input, int size)
 {
+    // verificar se input.size() == 0?
     QByteArray output;
-    output.append(inputBlock.right(TAM_BLOCO/2));
-    output.append(inputBlock.left(TAM_BLOCO/2));
-
+    int i = 0;
+    while(output.size() < size) //colocar TAM_BLOCO?
+    {
+        output.append(input.at(i%input.size()));
+    }
     return output;
 }
 
-void chiperRound(QByteArray& blockLeft, QByteArray& blockRight)
+QByteArray cipherRound(QByteArray block, QByteArray key)
 {
-    //fazer função para expandir a chave para o tamanho do bloco
+    //expandir/cortar chave
+    QByteArray resizedKey = simpleResize(key, TAM_BLOCO);
 
-    //Apply function on the right side. Use ref (&) to avoid instanciation new objects
-    for(int index=0; index<TAM_BLOCO/2; index++)
+    //separar bloco em duas partes
+    QByteArray left;
+    QByteArray right;
+    left = block.left(block.size()/2);
+    right = block.right(block.size()/2);
+
+    //operacoes bit a bit
+    for(int pos = 0; pos < TAM_BLOCO/2; pos++)
     {
-        //desenvolver funções para:
-        //1: aplicar XOR entre o bloco e a chave
-        //2: aplicar XOR entre os dois lados do bloco
-        //3: outras etapas opcionais (?)
-        //blockLeft[index] = blockLeft[index] ^ blockRight[index];
+        //right XOR key
+        //right[pos] = right[pos] ^ key[pos];
+
+        //right XOR left
+        //right[pos] = right[pos] ^ left[pos];
     }
 
-    //swapp sides
-    QByteArray swapAux = blockLeft;
-    blockLeft = blockRight;
-    blockRight = swapAux;
+    //juncao invertida
+    QByteArray output;
+    output.append(right);
+    output.append(left);
+
+    //return
+    return output;
 
 }
 
-QByteArray encrypt(const QByteArray& plainText) //PERGUNTA: O plaintext não deveria ser em QString?
+QByteArray encrypt(QByteArray input, QByteArray key)
+{
+    //quebrar em blocos
+    QList<QByteArray> blockList = breakIntoBlocks(input);
+
+    //realizar permutacao
+    //blockList = doPermutation(blockList);
+
+    //aplicar cipher
+    QList<QByteArray> cipherBlockList;
+    foreach(QByteArray block, blockList)
+    {
+        //numero de rounds
+        for (int round = 0; round < QTD_ROUNDS; round++)
+        {
+            block = cipherRound(block, key);
+        }
+        cipherBlockList.append(block);
+    }
+
+    //desfazer permutacao
+    //cipherBlockList = undoPermutation(cipherBlockList);
+
+    //juntar mensagem e returnar
+    return joinBlocks(cipherBlockList);
+}
+
+QByteArray decrypt(QByteArray input, QByteArray key)
+{
+    //quebrar em blocos
+    QList<QByteArray> blockList = breakIntoBlocks(input);
+
+    //realizar permutacao
+    //blockList = undoPermutation(blockList);
+
+    //aplicar cipher
+    QList<QByteArray> cipherBlockList;
+    foreach(QByteArray block, blockList)
+    {
+        //numero de rounds
+        for (int round = 0; round < QTD_ROUNDS; round++)
+        {
+            block = cipherRound(block, key);
+        }
+        cipherBlockList.append(block);
+    }
+
+    //desfazer permutacao
+    //cipherBlockList = doPermutation(cipherBlockList);
+
+    //juntar mensagem e returnar
+    return joinBlocks(cipherBlockList);
+}
+
+/*
+QByteArray oldEncrypt(const QByteArray& plainText) //PERGUNTA: O plaintext não deveria ser em QString?
 {
     //Do Initial permutation in whole Text
     QByteArray permutedText(plainText);
@@ -165,7 +243,6 @@ QByteArray encrypt(const QByteArray& plainText) //PERGUNTA: O plaintext não dev
     }
 
     //jeito do Filipe - TESTAR
-    /*
     QList<QByteArray> blockList = breakIntoBlocks(permutedText);
     QList<QByteArray> resultBlockList;
     foreach(QByteArray block, blockList)
@@ -179,12 +256,11 @@ QByteArray encrypt(const QByteArray& plainText) //PERGUNTA: O plaintext não dev
         {
             chiperRound(blockLeft, blockRight);
         }
-        QByteArray resultBlock = .append(blockLeft)
+        QByteArray resultBlock;
         resultBlock.append(blockLeft);
         resultBlock.append(blockRight);
         resultBlockList.append(resultBlock);
     }
-    */
 
     //jeito do Jacksom
     QByteArray block;
@@ -207,15 +283,9 @@ QByteArray encrypt(const QByteArray& plainText) //PERGUNTA: O plaintext não dev
 
     //Do final permutation before return
     return encryptedText;
+    return QByteArray();
 }
-
-
-
-
-
-
-
-
+*/
 
 
 

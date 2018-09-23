@@ -26,22 +26,19 @@ QList<QByteArray> breakIntoBlocks(QByteArray input);
 // print lista de blocos
 void printBlockList(QList<QByteArray> input);
 
-// realizar/desfazer permutacao inicial
+// realizar/desfazer permutacao
 QList<QByteArray> doPermutation(QList<QByteArray> input);
 QList<QByteArray> undoPermutation(QList<QByteArray> input);
 
-//Realiza swap
-QByteArray swapper(QByteArray inputBlock);
-
 //Funcoes de encriptacao
-QByteArray encrypt(const QByteArray& plainText);
-
-
-// realizar/desfazer permutacao final
+QByteArray encrypt(QByteArray input, QByteArray key);
+QByteArray decrypt(QByteArray input, QByteArray key);
+//QByteArray oldEncrypt(const QByteArray& plainText);
 
 // expandir chave
+QByteArray simpleResize(QByteArray input, int size);
 
 // aplicar uma 'rodada'
-void chiperRound(QByteArray& blockLeft, QByteArray& blockRight);
+QByteArray cipherRound(QByteArray block, QByteArray key);
 
 #endif // SIMPLECIPHER_H
