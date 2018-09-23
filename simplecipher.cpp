@@ -168,7 +168,7 @@ QByteArray encrypt(const QByteArray& plainText)
 
     QByteArray encryptedText;
 
-    for (int index=0; index<permutedText.size()-1; index+=TAM_BLOCO) //Block Loop
+    for (int index=0; index<permutedText.size(); index+=TAM_BLOCO) //Block Loop
     {
         block = permutedText.mid(index, TAM_BLOCO);
         blockLeft = block.left(block.size()/2);
