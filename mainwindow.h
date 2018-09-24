@@ -9,6 +9,9 @@
 #include <QList>
 #include <QDebug>
 #include <QApplication>
+#include <QTime>
+#include <QElapsedTimer>
+#include <QScrollBar>
 
 #include "simplecipher.h"
 
