@@ -15,7 +15,26 @@ char resetBit(char valor, int posicao)
     return valor & ~(1 << posicao);
 }
 
-QList<QByteArray> breakIntoBlocks(QByteArray input)
+SimpleCipher::SimpleCipher()
+{
+    TAM_BLOCO = 4;
+    TAM_CHAVE = 4;
+    DRIFT_PERM_INI = 3;
+    DRIFT_PERM_FIN = 3;
+    QTD_ROUNDS = 10;
+}
+
+void SimpleCipher::setBlockSize(int blockSize)
+{
+    TAM_BLOCO = blockSize;
+}
+
+void SimpleCipher::setRounds(int rounds)
+{
+    QTD_ROUNDS = rounds;
+}
+
+QList<QByteArray> SimpleCipher::breakIntoBlocks(QByteArray input)
 {
     QList<QByteArray> output;
     int i = 0;
@@ -33,7 +52,7 @@ QList<QByteArray> breakIntoBlocks(QByteArray input)
     return output;
 }
 
-QByteArray joinBlocks(QList<QByteArray> input)
+QByteArray SimpleCipher::joinBlocks(QList<QByteArray> input)
 {
     QByteArray output;
     foreach(QByteArray x, input)
@@ -43,7 +62,7 @@ QByteArray joinBlocks(QList<QByteArray> input)
     return output;
 }
 
-void printBlock(QByteArray input)
+void SimpleCipher::printBlock(QByteArray input)
 {
     QString string;
     for(int j = 0; j < input.size(); j++)
@@ -57,7 +76,7 @@ void printBlock(QByteArray input)
     qDebug().noquote() << string;
 }
 
-void printBlockList(QList<QByteArray> input)
+void SimpleCipher::printBlockList(QList<QByteArray> input)
 {
     for(int i = 0; i < input.size(); i++)
     {
@@ -75,7 +94,7 @@ void printBlockList(QList<QByteArray> input)
     qDebug().noquote() << "";
 }
 
-QByteArray doBlockPermutation(QByteArray input)
+QByteArray SimpleCipher::doBlockPermutation(QByteArray input)
 {
     QByteArray y(input.size(), static_cast<char>(0));
     int drift = -1;
@@ -108,7 +127,7 @@ QByteArray doBlockPermutation(QByteArray input)
     return y;
 }
 
-QByteArray undoBlockPermutation(QByteArray input)
+QByteArray SimpleCipher::undoBlockPermutation(QByteArray input)
 {
     QByteArray y(input.size(), static_cast<char>(0));
     int drift = -1;
@@ -141,7 +160,7 @@ QByteArray undoBlockPermutation(QByteArray input)
     return y;
 }
 
-QList<QByteArray> doBlockListPermutation(QList<QByteArray> input)
+QList<QByteArray> SimpleCipher::doBlockListPermutation(QList<QByteArray> input)
 {
     QList<QByteArray> output;
     foreach(QByteArray x, input)
@@ -151,7 +170,7 @@ QList<QByteArray> doBlockListPermutation(QList<QByteArray> input)
     return output;
 }
 
-QList<QByteArray> undoBlockListPermutation(QList<QByteArray> input)
+QList<QByteArray> SimpleCipher::undoBlockListPermutation(QList<QByteArray> input)
 {
     QList<QByteArray> output;
     foreach(QByteArray x, input)
@@ -162,7 +181,7 @@ QList<QByteArray> undoBlockListPermutation(QList<QByteArray> input)
 }
 
 
-QByteArray simpleResize(QByteArray input, int size)
+QByteArray SimpleCipher::simpleResize(QByteArray input, int size)
 {
     // verificar se input.size() == 0?
     QByteArray output;
@@ -174,7 +193,7 @@ QByteArray simpleResize(QByteArray input, int size)
     return output;
 }
 
-QByteArray functionF(QByteArray halfBlock, QByteArray key)
+QByteArray SimpleCipher::functionF(QByteArray halfBlock, QByteArray key)
 {
     for (int index=0; index < halfBlock.size(); index++)
     {
@@ -184,7 +203,7 @@ QByteArray functionF(QByteArray halfBlock, QByteArray key)
     return halfBlock;
 }
 
-QByteArray cipherRound(QByteArray block, QByteArray key)
+QByteArray SimpleCipher::cipherRound(QByteArray block, QByteArray key)
 {
     //expandir/cortar chave
     QByteArray resizedKey = simpleResize(key, TAM_BLOCO);
@@ -214,7 +233,7 @@ QByteArray cipherRound(QByteArray block, QByteArray key)
 
 }
 
-QByteArray decipherRound(QByteArray block, QByteArray key)
+QByteArray SimpleCipher::decipherRound(QByteArray block, QByteArray key)
 {
     //expandir/cortar chave
     QByteArray resizedKey = simpleResize(key, TAM_BLOCO);
@@ -244,7 +263,7 @@ QByteArray decipherRound(QByteArray block, QByteArray key)
 
 }
 
-QByteArray encrypt(QByteArray input, QByteArray key)
+QByteArray SimpleCipher::encrypt(QByteArray input, QByteArray key)
 {
     //quebrar em blocos
     QList<QByteArray> blockList = breakIntoBlocks(input);
@@ -271,7 +290,7 @@ QByteArray encrypt(QByteArray input, QByteArray key)
     return joinBlocks(cipherBlockList);
 }
 
-QByteArray decrypt(QByteArray input, QByteArray key)
+QByteArray SimpleCipher::decrypt(QByteArray input, QByteArray key)
 {
     //quebrar em blocos
     QList<QByteArray> blockList = breakIntoBlocks(input);

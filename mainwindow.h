@@ -26,8 +26,16 @@ public:
 
 private slots:
 
+    void on_criptografar_button_pressed();
+    void printLog(QString log);
+
+    void on_descriptografar_button_pressed();
+
+    void on_aplicar_config_button_pressed();
+
 private:
     Ui::MainWindow *ui;
+    SimpleCipher cipher;
 };
 
 #endif // MAINWINDOW_H

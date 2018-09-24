@@ -32,7 +32,11 @@
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_5">
            <item>
-            <widget class="QPlainTextEdit" name="mensagem_plaintext"/>
+            <widget class="QPlainTextEdit" name="mensagem_plaintext">
+             <property name="plainText">
+              <string>The quick brown fox jumps over the lazy dog</string>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -55,38 +59,6 @@
              <property name="currentIndex">
               <number>0</number>
              </property>
-             <widget class="QWidget" name="tab_4">
-              <attribute name="title">
-               <string>Binário</string>
-              </attribute>
-              <layout class="QVBoxLayout" name="verticalLayout_9">
-               <property name="spacing">
-                <number>0</number>
-               </property>
-               <property name="leftMargin">
-                <number>0</number>
-               </property>
-               <property name="topMargin">
-                <number>0</number>
-               </property>
-               <property name="rightMargin">
-                <number>0</number>
-               </property>
-               <property name="bottomMargin">
-                <number>0</number>
-               </property>
-               <item>
-                <widget class="QPlainTextEdit" name="encriptado_binario_plaintext">
-                 <property name="frameShape">
-                  <enum>QFrame::NoFrame</enum>
-                 </property>
-                 <property name="readOnly">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
              <widget class="QWidget" name="tab_5">
               <attribute name="title">
                <string>Hexadecimal</string>
@@ -142,38 +114,6 @@
              <property name="currentIndex">
               <number>0</number>
              </property>
-             <widget class="QWidget" name="tab_6">
-              <attribute name="title">
-               <string>Binário</string>
-              </attribute>
-              <layout class="QVBoxLayout" name="verticalLayout_11">
-               <property name="spacing">
-                <number>0</number>
-               </property>
-               <property name="leftMargin">
-                <number>0</number>
-               </property>
-               <property name="topMargin">
-                <number>0</number>
-               </property>
-               <property name="rightMargin">
-                <number>0</number>
-               </property>
-               <property name="bottomMargin">
-                <number>0</number>
-               </property>
-               <item>
-                <widget class="QPlainTextEdit" name="mensagem_encriptada_binario_plaintext">
-                 <property name="frameShape">
-                  <enum>QFrame::NoFrame</enum>
-                 </property>
-                 <property name="readOnly">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
              <widget class="QWidget" name="tab_7">
               <attribute name="title">
                <string>Hexadecimal</string>
@@ -241,7 +181,11 @@
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_2">
            <item>
-            <widget class="QLineEdit" name="chave_line"/>
+            <widget class="QLineEdit" name="chave_line">
+             <property name="text">
+              <string>password</string>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -260,7 +204,20 @@
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QSpinBox" name="block_size_spin"/>
+            <widget class="QSpinBox" name="block_size_spin">
+             <property name="minimum">
+              <number>2</number>
+             </property>
+             <property name="maximum">
+              <number>128</number>
+             </property>
+             <property name="singleStep">
+              <number>2</number>
+             </property>
+             <property name="value">
+              <number>4</number>
+             </property>
+            </widget>
            </item>
            <item row="1" column="0">
             <widget class="QLabel" name="label_3">
@@ -270,7 +227,17 @@
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="QSpinBox" name="rounds_spin"/>
+            <widget class="QSpinBox" name="rounds_spin">
+             <property name="minimum">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <number>100</number>
+             </property>
+             <property name="value">
+              <number>10</number>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
