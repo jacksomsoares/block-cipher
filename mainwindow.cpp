@@ -22,14 +22,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     //Teste Encrypt
     QByteArray key("affs");
-    QByteArray plainText(QString("texto exemplo").toLatin1());
+    QByteArray plainText(QString("The quick brown fox jumps over the lazy dog").toLatin1());
     qDebug() << plainText;
-    printBlock(plainText);
+    //printBlock(plainText);
     QByteArray encryptedText = encrypt(plainText, key);
-    printBlock(encryptedText);
-    //qDebug() << encryptedText;
+    //printBlock(encryptedText);
+    qDebug() << encryptedText;
     QByteArray decryptedText = decrypt(encryptedText, key);
-    printBlock(decryptedText);
+    //printBlock(decryptedText);
     qDebug() << decryptedText;
 }
 

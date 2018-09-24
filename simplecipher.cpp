@@ -174,24 +174,14 @@ QByteArray simpleResize(QByteArray input, int size)
     return output;
 }
 
-QByteArray functionF(QByteArray right, QByteArray key)
+QByteArray functionF(QByteArray halfBlock, QByteArray key)
 {
-    for (int index=0; index < right.size(); index++)
+    for (int index=0; index < halfBlock.size(); index++)
     {
-        right[index] = right[index] ^ key[index];
+        halfBlock[index] = halfBlock[index] ^ key[index];
     }
-    right = doBlockPermutation(right);
-    return right;
-}
-
-QByteArray functionG(QByteArray left, QByteArray key)
-{
-    for (int index=0; index<left.size(); index++)
-    {
-        left[index] = left[index] ^ key[index];
-    }
-    left = doBlockPermutation(left);
-    return left;
+    halfBlock = doBlockPermutation(halfBlock);
+    return halfBlock;
 }
 
 QByteArray cipherRound(QByteArray block, QByteArray key)
@@ -235,7 +225,7 @@ QByteArray decipherRound(QByteArray block, QByteArray key)
     left = block.left(block.size()/2);
     right = block.right(block.size()/2);
 
-    QByteArray temp = functionG(left, key);
+    QByteArray temp = functionF(left, key);
 
     //operacoes bit a bit
     for(int pos = 0; pos < TAM_BLOCO/2; pos++)
