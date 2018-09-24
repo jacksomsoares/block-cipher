@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>FJ Cipher</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -32,13 +32,13 @@
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_5">
            <item>
-            <widget class="QPlainTextEdit" name="plainTextEdit"/>
+            <widget class="QPlainTextEdit" name="mensagem_plaintext"/>
            </item>
           </layout>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton">
+         <widget class="QPushButton" name="criptografar_button">
           <property name="text">
            <string>Criptografar</string>
           </property>
@@ -76,9 +76,12 @@
                 <number>0</number>
                </property>
                <item>
-                <widget class="QPlainTextEdit" name="plainTextEdit_2">
+                <widget class="QPlainTextEdit" name="encriptado_binario_plaintext">
                  <property name="frameShape">
                   <enum>QFrame::NoFrame</enum>
+                 </property>
+                 <property name="readOnly">
+                  <bool>true</bool>
                  </property>
                 </widget>
                </item>
@@ -105,9 +108,12 @@
                 <number>0</number>
                </property>
                <item>
-                <widget class="QPlainTextEdit" name="plainTextEdit_5">
+                <widget class="QPlainTextEdit" name="encriptado_hexadecimal_plaintext">
                  <property name="frameShape">
                   <enum>QFrame::NoFrame</enum>
+                 </property>
+                 <property name="readOnly">
+                  <bool>true</bool>
                  </property>
                 </widget>
                </item>
@@ -157,9 +163,12 @@
                 <number>0</number>
                </property>
                <item>
-                <widget class="QPlainTextEdit" name="plainTextEdit_4">
+                <widget class="QPlainTextEdit" name="mensagem_encriptada_binario_plaintext">
                  <property name="frameShape">
                   <enum>QFrame::NoFrame</enum>
+                 </property>
+                 <property name="readOnly">
+                  <bool>true</bool>
                  </property>
                 </widget>
                </item>
@@ -186,7 +195,7 @@
                 <number>0</number>
                </property>
                <item>
-                <widget class="QPlainTextEdit" name="plainTextEdit_6">
+                <widget class="QPlainTextEdit" name="mensagem_encriptada_hexadecimal_plaintext">
                  <property name="frameShape">
                   <enum>QFrame::NoFrame</enum>
                  </property>
@@ -200,7 +209,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_2">
+         <widget class="QPushButton" name="descriptografar_button">
           <property name="text">
            <string>Descriptografar</string>
           </property>
@@ -213,7 +222,7 @@
           </property>
           <layout class="QVBoxLayout" name="verticalLayout">
            <item>
-            <widget class="QPlainTextEdit" name="plainTextEdit_3"/>
+            <widget class="QPlainTextEdit" name="mensagem_desencriptada_plaintext"/>
            </item>
           </layout>
          </widget>
@@ -232,7 +241,7 @@
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_2">
            <item>
-            <widget class="QLineEdit" name="lineEdit"/>
+            <widget class="QLineEdit" name="chave_line"/>
            </item>
           </layout>
          </widget>
@@ -251,7 +260,7 @@
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QSpinBox" name="spinBox"/>
+            <widget class="QSpinBox" name="block_size_spin"/>
            </item>
            <item row="1" column="0">
             <widget class="QLabel" name="label_3">
@@ -261,7 +270,7 @@
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="QSpinBox" name="spinBox_2"/>
+            <widget class="QSpinBox" name="rounds_spin"/>
            </item>
           </layout>
          </widget>
@@ -295,13 +304,27 @@
            </spacer>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_3">
+           <widget class="QPushButton" name="aplicar_config_button">
             <property name="text">
              <string>Aplicar alterações</string>
             </property>
            </widget>
           </item>
          </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_8">
+       <attribute name="title">
+        <string>Log</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_14">
+        <item>
+         <widget class="QPlainTextEdit" name="log_plaintext">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
