@@ -39,7 +39,6 @@ QList<QByteArray> undoBlockListPermutation(QList<QByteArray> input, int drift = 
 //Funcoes de encriptacao
 QByteArray encrypt(QByteArray input, QByteArray key);
 QByteArray decrypt(QByteArray input, QByteArray key);
-//QByteArray oldEncrypt(const QByteArray& plainText);
 
 // expandir chave
 QByteArray simpleResize(QByteArray input, int size);
