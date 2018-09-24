@@ -8,6 +8,7 @@
 #include <QSpinBox>
 #include <QList>
 #include <QDebug>
+#include <QApplication>
 
 #include "simplecipher.h"
 
@@ -24,15 +25,9 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_button_decrypt_pressed();
-    void on_button_crypt_pressed();
 
 private:
     Ui::MainWindow *ui;
-
-    QPlainTextEdit* textOriginal;
-    QPlainTextEdit* textCriptogrado;
-    QByteArray pegarChave();
 };
 
 #endif // MAINWINDOW_H

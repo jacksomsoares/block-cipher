@@ -28,13 +28,13 @@ void printBlock(QByteArray input);
 void printBlockList(QList<QByteArray> input);
 
 // realizar/desfazer permutacao
-QByteArray doBlockPermutation(QByteArray input, int drift = -1);
-QByteArray undoBlockPermutation(QByteArray input, int drift = -1);
+QByteArray doBlockPermutation(QByteArray input);
+QByteArray undoBlockPermutation(QByteArray input);
 
 // realizar/desfazer permutacao em lista de blocos
 
-QList<QByteArray> doBlockListPermutation(QList<QByteArray> input, int drift = -1);
-QList<QByteArray> undoBlockListPermutation(QList<QByteArray> input, int drift = -1);
+QList<QByteArray> doBlockListPermutation(QList<QByteArray> input);
+QList<QByteArray> undoBlockListPermutation(QList<QByteArray> input);
 
 //Funcoes de encriptacao
 QByteArray encrypt(QByteArray input, QByteArray key);

@@ -75,10 +75,10 @@ void printBlockList(QList<QByteArray> input)
     qDebug().noquote() << "";
 }
 
-QByteArray doBlockPermutation(QByteArray input, int drift)
+QByteArray doBlockPermutation(QByteArray input)
 {
     QByteArray y(input.size(), static_cast<char>(0));
-    //int drift = -1;
+    int drift = -1;
     int driftCounter = 0;
     int secondStepCounter = -1;
     for(int i = 0; i < input.size(); i++)
@@ -108,10 +108,10 @@ QByteArray doBlockPermutation(QByteArray input, int drift)
     return y;
 }
 
-QByteArray undoBlockPermutation(QByteArray input, int drift)
+QByteArray undoBlockPermutation(QByteArray input)
 {
     QByteArray y(input.size(), static_cast<char>(0));
-    //int drift = -1;
+    int drift = -1;
     int driftCounter = 0;
     int secondStepCounter = -1;
     for(int i = 0; i < input.size(); i++)
@@ -141,22 +141,22 @@ QByteArray undoBlockPermutation(QByteArray input, int drift)
     return y;
 }
 
-QList<QByteArray> doBlockListPermutation(QList<QByteArray> input, int drift)
+QList<QByteArray> doBlockListPermutation(QList<QByteArray> input)
 {
     QList<QByteArray> output;
     foreach(QByteArray x, input)
     {
-        output.append(doBlockPermutation(x, drift));
+        output.append(doBlockPermutation(x));
     }
     return output;
 }
 
-QList<QByteArray> undoBlockListPermutation(QList<QByteArray> input, int drift)
+QList<QByteArray> undoBlockListPermutation(QList<QByteArray> input)
 {
     QList<QByteArray> output;
     foreach(QByteArray x, input)
     {
-       output.append(undoBlockPermutation(x, drift));
+       output.append(undoBlockPermutation(x));
     }
     return output;
 }
