@@ -72,83 +72,95 @@ void printBlockList(QList<QByteArray> input)
         }
         qDebug().noquote() << string;
     }
+    qDebug().noquote() << "";
 }
 
-QList<QByteArray> doPermutation(QList<QByteArray> input, int drift)
+QByteArray doBlockPermutation(QByteArray input, int drift)
+{
+    QByteArray y(input.size(), static_cast<char>(0));
+    //int drift = -1;
+    int driftCounter = 0;
+    int secondStepCounter = -1;
+    for(int i = 0; i < input.size(); i++)
+    {
+        for(int m = 7; m >= 0; m--)
+        {
+            if(driftCounter % DRIFT_PERM_INI == 0) drift++;
+            driftCounter++;
+            int oByte = i;
+            int oBit = m;
+            int dByte = i + (((7 - m) + drift) / 8);
+            int dBit = (m - drift) % 8;
+            if(dBit < 0) dBit = 8 + dBit;
+            if(dByte >= y.size())
+            {
+                secondStepCounter += DRIFT_PERM_INI + 1;
+                dByte = secondStepCounter / 8;
+                dBit = 7 - (secondStepCounter % 8);
+            }
+            if(valorBit(input[oByte], oBit) != 0)
+            {
+                y[dByte] = setBit(y[dByte], dBit);
+                //qDebug().noquote() << oByte << "[" << oBit << "]  -> " << dByte << "[" << dBit << "]";
+            }
+        }
+    }
+    return y;
+}
+
+QByteArray undoBlockPermutation(QByteArray input, int drift)
+{
+    QByteArray y(input.size(), static_cast<char>(0));
+    //int drift = -1;
+    int driftCounter = 0;
+    int secondStepCounter = -1;
+    for(int i = 0; i < input.size(); i++)
+    {
+        for(int m = 7; m >= 0; m--)
+        {
+            if(driftCounter % DRIFT_PERM_INI == 0) drift++;
+            driftCounter++;
+            int oByte = i;
+            int oBit = m;
+            int dByte = i + (((7 - m) + drift) / 8);
+            int dBit = (m - drift) % 8;
+            if(dBit < 0) dBit = 8 + dBit;
+            if(dByte >= y.size())
+            {
+                secondStepCounter += DRIFT_PERM_INI + 1;
+                dByte = secondStepCounter / 8;
+                dBit = 7 - (secondStepCounter % 8);
+            }
+            if(valorBit(input[dByte], dBit) != 0)
+            {
+                y[oByte] = setBit(y[oByte], oBit);
+                //qDebug().noquote() << oByte << "[" << oBit << "]  <- " << dByte << "[" << dBit << "]";
+            }
+        }
+    }
+    return y;
+}
+
+QList<QByteArray> doBlockListPermutation(QList<QByteArray> input, int drift)
 {
     QList<QByteArray> output;
     foreach(QByteArray x, input)
     {
-        QByteArray y(x.size(), static_cast<char>(0));
-        //int drift = -1;
-        int driftCounter = 0;
-        int secondStepCounter = -1;
-        for(int i = 0; i < x.size(); i++)
-        {
-            for(int m = 7; m >= 0; m--)
-            {
-                if(driftCounter % DRIFT_PERM_INI == 0) drift++;
-                driftCounter++;
-                int oByte = i;
-                int oBit = m;
-                int dByte = i + (((7 - m) + drift) / 8);
-                int dBit = (m - drift) % 8;
-                if(dBit < 0) dBit = 8 + dBit;
-                if(dByte >= y.size())
-                {
-                    secondStepCounter += DRIFT_PERM_INI + 1;
-                    dByte = secondStepCounter / 8;
-                    dBit = 7 - (secondStepCounter % 8);
-                }
-                if(valorBit(x[oByte], oBit) != 0)
-                {
-                    y[dByte] = setBit(y[dByte], dBit);
-                    //qDebug().noquote() << oByte << "[" << oBit << "]  -> " << dByte << "[" << dBit << "]";
-                }
-            }
-        }
-        output.append(y);
+        output.append(doBlockPermutation(x));
     }
     return output;
 }
 
-QList<QByteArray> undoPermutation(QList<QByteArray> input, int drift)
+QList<QByteArray> undoBlockListPermutation(QList<QByteArray> input, int drift)
 {
     QList<QByteArray> output;
     foreach(QByteArray x, input)
     {
-        QByteArray y(x.size(), static_cast<char>(0));
-        //int drift = -1;
-        int driftCounter = 0;
-        int secondStepCounter = -1;
-        for(int i = 0; i < x.size(); i++)
-        {
-            for(int m = 7; m >= 0; m--)
-            {
-                if(driftCounter % DRIFT_PERM_INI == 0) drift++;
-                driftCounter++;
-                int oByte = i;
-                int oBit = m;
-                int dByte = i + (((7 - m) + drift) / 8);
-                int dBit = (m - drift) % 8;
-                if(dBit < 0) dBit = 8 + dBit;
-                if(dByte >= y.size())
-                {
-                    secondStepCounter += DRIFT_PERM_INI + 1;
-                    dByte = secondStepCounter / 8;
-                    dBit = 7 - (secondStepCounter % 8);
-                }
-                if(valorBit(x[dByte], dBit) != 0)
-                {
-                    y[oByte] = setBit(y[oByte], oBit);
-                    //qDebug().noquote() << oByte << "[" << oBit << "]  <- " << dByte << "[" << dBit << "]";
-                }
-            }
-        }
-        output.append(y);
+       output.append(undoBlockPermutation(x));
     }
     return output;
 }
+
 
 QByteArray simpleResize(QByteArray input, int size)
 {
@@ -229,8 +241,12 @@ QByteArray encrypt(QByteArray input, QByteArray key)
     //quebrar em blocos
     QList<QByteArray> blockList = breakIntoBlocks(input);
 
+    /*
+    printBlockList(blockList);
     //realizar permutacao
-    //blockList = doPermutation(blockList);
+    blockList = doBlockListPermutation(blockList);
+    printBlockList(blockList);
+    */
 
     //aplicar cipher
     QList<QByteArray> cipherBlockList;
@@ -272,7 +288,7 @@ QByteArray decrypt(QByteArray input, QByteArray key)
     }
 
     //desfazer permutacao
-    //cipherBlockList = undoPermutation(cipherBlockList);
+    //cipherBlockList = undoBlockListPermutation(cipherBlockList);
 
     //juntar mensagem e returnar
     return joinBlocks(cipherBlockList);
