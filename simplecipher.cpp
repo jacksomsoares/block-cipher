@@ -174,6 +174,28 @@ QByteArray simpleResize(QByteArray input, int size)
     return output;
 }
 
+QByteArray funcionF(QByteArray rightSide, QByteArray key)
+{
+    for (int index=0; index<rightSide.size(); index++){
+        rightSide[index] = rightSide[index] ^ key[index];
+    }
+
+    QByteArray output = doBlockPermutation(rightSide);
+
+    return output;
+}
+
+QByteArray funcionG(QByteArray rightSide, QByteArray key)
+{
+    rightSide = undoBlockPermutation(rightSide);
+
+    for (int index=0; index<rightSide.size(); index++){
+        rightSide[index] = rightSide[index] ^ key[index];
+    }
+
+    return rightSide;
+}
+
 QByteArray cipherRound(QByteArray block, QByteArray key)
 {
     //expandir/cortar chave
@@ -185,11 +207,14 @@ QByteArray cipherRound(QByteArray block, QByteArray key)
     left = block.left(block.size()/2);
     right = block.right(block.size()/2);
 
+    right =  funcionF(right, key);
+
     //operacoes bit a bit
     for(int pos = 0; pos < TAM_BLOCO/2; pos++)
     {
         //right XOR key
-        char f = right[pos] ^ key[pos];
+        //char f = right[pos] ^ key[pos];
+        char f = right[pos];
 
         //left XOR temp
         left[pos] = left[pos] ^ f;
@@ -216,11 +241,14 @@ QByteArray decipherRound(QByteArray block, QByteArray key)
     left = block.left(block.size()/2);
     right = block.right(block.size()/2);
 
+    right =  funcionG(right, key);
+
     //operacoes bit a bit
     for(int pos = 0; pos < TAM_BLOCO/2; pos++)
     {
         //left XOR key
-        char temp = left[pos] ^ key[pos];
+        //char temp = left[pos] ^ key[pos];
+        char temp = right[pos];
 
         //right XOR left
         right[pos] = right[pos] ^ temp;

@@ -26,9 +26,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     qDebug() << plainText;
     printBlock(plainText);
     QByteArray encryptedText = encrypt(plainText, key);
-    printBlock(encryptedText);//qDebug() << encryptedText;
+    printBlock(encryptedText);
+    //qDebug() << encryptedText;
     QByteArray decryptedText = decrypt(encryptedText, key);
-    printBlock(decryptedText);//qDebug() << decryptedText;
+    printBlock(decryptedText);
     qDebug() << decryptedText;
 }
 
