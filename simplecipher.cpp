@@ -193,6 +193,25 @@ QByteArray SimpleCipher::simpleResize(QByteArray input, int size)
     return output;
 }
 
+QByteArray SimpleCipher::prepareKey(QByteArray input)
+{
+    QByteArray output(TAM_BLOCO/2, '\0');
+
+    //expandir chave (se necessario)
+    if(input.size() == 0)
+        return output;
+    else if(input.size() < TAM_BLOCO/2)
+        input = simpleResize(input, TAM_BLOCO/2);
+
+    //diminuir tamanho da chave aplicando operacoes XOR
+    for(int i = 0; i < input.size(); i++)
+    {
+        int outputPos = i%output.size();
+        output[outputPos] = output[outputPos] ^ input[i];
+    }
+    return output;
+}
+
 QByteArray SimpleCipher::functionF(QByteArray halfBlock, QByteArray key)
 {
     for (int index=0; index < halfBlock.size(); index++)
@@ -205,8 +224,9 @@ QByteArray SimpleCipher::functionF(QByteArray halfBlock, QByteArray key)
 
 QByteArray SimpleCipher::cipherRound(QByteArray block, QByteArray key)
 {
-    //expandir/cortar chave
-    QByteArray resizedKey = simpleResize(key, TAM_BLOCO);
+    //preparar chave
+    //QByteArray resizedKey = simpleResize(key, TAM_BLOCO);
+    QByteArray resizedKey = prepareKey(key);
 
     //separar bloco em duas partes
     QByteArray left;
@@ -214,7 +234,7 @@ QByteArray SimpleCipher::cipherRound(QByteArray block, QByteArray key)
     left = block.left(block.size()/2);
     right = block.right(block.size()/2);
 
-    QByteArray temp = functionF(right, key);
+    QByteArray temp = functionF(right, resizedKey);
 
     //operacoes bit a bit
     for(int pos = 0; pos < TAM_BLOCO/2; pos++)
@@ -235,8 +255,9 @@ QByteArray SimpleCipher::cipherRound(QByteArray block, QByteArray key)
 
 QByteArray SimpleCipher::decipherRound(QByteArray block, QByteArray key)
 {
-    //expandir/cortar chave
-    QByteArray resizedKey = simpleResize(key, TAM_BLOCO);
+    //preparar chave
+    //QByteArray resizedKey = simpleResize(key, TAM_BLOCO);
+    QByteArray resizedKey = prepareKey(key);
 
     //separar bloco em duas partes
     QByteArray left;
@@ -244,7 +265,7 @@ QByteArray SimpleCipher::decipherRound(QByteArray block, QByteArray key)
     left = block.left(block.size()/2);
     right = block.right(block.size()/2);
 
-    QByteArray temp = functionF(left, key);
+    QByteArray temp = functionF(left, resizedKey);
 
     //operacoes bit a bit
     for(int pos = 0; pos < TAM_BLOCO/2; pos++)

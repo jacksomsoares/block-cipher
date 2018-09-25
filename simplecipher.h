@@ -53,6 +53,7 @@ private:
 
     //expandir chave
     QByteArray simpleResize(QByteArray input, int size);
+    QByteArray prepareKey(QByteArray input);
 
     //aplicar uma 'rodada'
     QByteArray cipherRound(QByteArray block, QByteArray key);
