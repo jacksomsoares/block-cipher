@@ -6,6 +6,10 @@
 #include <QByteArray>
 #include <QDebug>
 
+#include <thread>
+#include <vector>
+#include <future>
+
 //funcoes para operacoes bit-a-bit
 char valorBit(char valor, int posicao);
 char setBit(char valor, int posicao);
@@ -25,6 +29,10 @@ public:
     //funcoes de encriptacao
     QByteArray encrypt(QByteArray input, QByteArray key);
     QByteArray decrypt(QByteArray input, QByteArray key);
+
+    //funcoes multithread
+    QByteArray encryptThread(QByteArray input, QByteArray key);
+    QByteArray encryptMultiThread(QByteArray input, QByteArray key);
 
 private:
     //gerar/juntar lista de blocos

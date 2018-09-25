@@ -290,6 +290,49 @@ QByteArray SimpleCipher::encrypt(QByteArray input, QByteArray key)
     return joinBlocks(cipherBlockList);
 }
 
+QByteArray SimpleCipher::encryptThread(QByteArray input, QByteArray key)
+{
+    //realizar permutacao
+    input = doBlockPermutation(input);
+
+    //numero de rounds
+    for (int round = 0; round < QTD_ROUNDS; round++)
+    {
+        input = cipherRound(input, key);
+    }
+
+    //desfazer permutacao
+    input = undoBlockPermutation(input);
+
+    return input;
+}
+
+QByteArray SimpleCipher::encryptMultiThread(QByteArray input, QByteArray key)
+{
+    //quebrar em blocos
+    QList<QByteArray> blockList = breakIntoBlocks(input);
+
+    //threads
+    std::vector<std::future<QByteArray>> asyncVector;
+    foreach(QByteArray block, blockList)
+    {
+        asyncVector.push_back(std::async(std::launch::async, [](SimpleCipher* cipher, QByteArray input, QByteArray key)
+        {
+            return cipher->encryptThread(input, key);
+        }, this, block, key));
+    }
+
+    QList<QByteArray> cipherBlockList;
+
+    for(unsigned int i = 0; i < asyncVector.size(); i++)
+    {
+        cipherBlockList.append(asyncVector.at(i).get());
+    }
+
+    //juntar mensagem e returnar
+    return joinBlocks(cipherBlockList);
+}
+
 QByteArray SimpleCipher::decrypt(QByteArray input, QByteArray key)
 {
     //quebrar em blocos

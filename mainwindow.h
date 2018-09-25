@@ -36,6 +36,8 @@ private slots:
 
     void on_aplicar_config_button_pressed();
 
+    void on_criptografar_multithread_button_pressed();
+
 private:
     Ui::MainWindow *ui;
     SimpleCipher cipher;
