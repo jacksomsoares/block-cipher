@@ -120,7 +120,6 @@ QByteArray SimpleCipher::doBlockPermutation(QByteArray input)
             if(valorBit(input[oByte], oBit) != 0)
             {
                 y[dByte] = setBit(y[dByte], dBit);
-                //qDebug().noquote() << oByte << "[" << oBit << "]  -> " << dByte << "[" << dBit << "]";
             }
         }
     }
@@ -153,7 +152,6 @@ QByteArray SimpleCipher::undoBlockPermutation(QByteArray input)
             if(valorBit(input[dByte], dBit) != 0)
             {
                 y[oByte] = setBit(y[oByte], oBit);
-                //qDebug().noquote() << oByte << "[" << oBit << "]  <- " << dByte << "[" << dBit << "]";
             }
         }
     }
@@ -225,7 +223,6 @@ QByteArray SimpleCipher::functionF(QByteArray halfBlock, QByteArray key)
 QByteArray SimpleCipher::cipherRound(QByteArray block, QByteArray key)
 {
     //preparar chave
-    //QByteArray resizedKey = simpleResize(key, TAM_BLOCO);
     QByteArray resizedKey = prepareKey(key);
 
     //separar bloco em duas partes
@@ -256,7 +253,6 @@ QByteArray SimpleCipher::cipherRound(QByteArray block, QByteArray key)
 QByteArray SimpleCipher::decipherRound(QByteArray block, QByteArray key)
 {
     //preparar chave
-    //QByteArray resizedKey = simpleResize(key, TAM_BLOCO);
     QByteArray resizedKey = prepareKey(key);
 
     //separar bloco em duas partes
@@ -381,7 +377,20 @@ QByteArray SimpleCipher::decrypt(QByteArray input, QByteArray key)
     return joinBlocks(cipherBlockList);
 }
 
+double SimpleCipher::differencePercentage(QByteArray input1, QByteArray input2)
+{
+    int length = input1.size();
+    if(input2.size() < input1.size()) length = input2.size();
+    int bitsChanged = 0;
 
+    for(int i = 0; i < length; i++)
+    {
+        int byte = i/8;
+        int bit = i%8;
+        if(valorBit(input1[byte], bit) != valorBit(input2[byte], bit)) bitsChanged++;
+    }
+    return (double)bitsChanged / (double)length;
+}
 
 
 

@@ -38,6 +38,12 @@ private slots:
 
     void on_criptografar_multithread_button_pressed();
 
+    void on_chave_line_textEdited(const QString &arg1);
+
+    void on_chave_hexadecimal_line_textEdited(const QString &arg1);
+
+    void on_block_size_spin_valueChanged(int arg1);
+
 private:
     Ui::MainWindow *ui;
     SimpleCipher cipher;

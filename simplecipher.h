@@ -34,6 +34,9 @@ public:
     QByteArray encryptThread(QByteArray input, QByteArray key);
     QByteArray encryptMultiThread(QByteArray input, QByteArray key);
 
+    //funcao comparacao
+    static double differencePercentage(QByteArray input1, QByteArray input2);
+
 private:
     //gerar/juntar lista de blocos
     QList<QByteArray> breakIntoBlocks(QByteArray input);
