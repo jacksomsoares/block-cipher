@@ -7,6 +7,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     qApp->setStyle("fusion");
     ui->chave_hexadecimal_line->setText(ui->chave_line->text().toLatin1().toHex());
 
+    ui->block_size_spin->setValue(cipher.getBlockSize());
+    ui->rounds_spin->setValue(cipher.getRounds());
+
     //qDebug() << SimpleCipher::differencePercentage(QByteArray(8, (char)15), QByteArray(8, (char)255))*100;
 }
 
@@ -122,8 +125,6 @@ void MainWindow::on_aplicar_config_button_pressed()
     printLog("novas configurações aplicadas!\n");
 }
 
-
-
 void MainWindow::on_chave_line_textEdited(const QString &arg1)
 {
     ui->chave_hexadecimal_line->setText(arg1.toLatin1().toHex());
@@ -137,4 +138,157 @@ void MainWindow::on_chave_hexadecimal_line_textEdited(const QString &arg1)
 void MainWindow::on_block_size_spin_valueChanged(int arg1)
 {
     ui->key_size_spin->setValue(arg1/2);
+}
+
+void MainWindow::on_plot_button_pressed()
+{
+    printLog("plot_button pressionado\n");
+
+    //limpar grafico anterior
+    QCustomPlot* plot = ui->custom_plot_widget;
+    plot->clearPlottables();
+
+    //dados
+    QVector<double> eixoY(100);
+    QVector<double> eixoYMultiThread(100);
+    QVector<double> eixoX(100);
+    double maiorValorY = 0;
+
+    //dados do eixo x
+    for(int i = 0; i < 100; i++)
+    {
+        eixoX[i] = i+1;
+    }
+
+    //mensagem e chave
+    QByteArray mensagem = ui->mensagem_plaintext->toPlainText().toLatin1();
+    QByteArray chave = ui->chave_line->text().toLatin1();
+
+    //verificar opcoes escolhidas
+    if(ui->eixo_x_block_radio->isChecked())
+    {
+        for(int i = 0; i < 100; i++)
+        {
+            if((int)eixoX[i] == 1)
+            {
+                eixoY[i] = 0.0;
+                eixoYMultiThread[i] = 0.0;
+            }
+            else if((int)eixoX[i] % 2)
+            {
+                eixoY[i] = eixoY[i-1];
+                eixoYMultiThread[i] = eixoYMultiThread[i-1];
+            }
+            else
+            {
+                //config cipher
+                cipher.setBlockSize((int)eixoX[i]);
+
+                //timer
+                QElapsedTimer timer;
+                timer.start();
+
+                //encrypt
+                QByteArray mensagem_criptografada = cipher.encrypt(mensagem, chave);
+
+                //timer
+                qint64 elapsedTime = timer.nsecsElapsed();
+                double msTime = elapsedTime / 1000.0 / 1000.0;
+
+                //timer2
+                QElapsedTimer timer2;
+                timer2.start();
+
+                //encrypt multithread
+                cipher.encryptMultiThread(mensagem, chave);
+
+                //timer2
+                qint64 elapsedTimeThread = timer2.nsecsElapsed();
+                timer2.invalidate();
+                double msTimeThread = elapsedTimeThread / 1000.0 / 1000.0;
+
+                //armazenando dados
+                if(ui->eixo_y_tempo_radio->isChecked())
+                {
+                    eixoY[i] = msTime;
+                    eixoYMultiThread[i] = msTimeThread;
+                    if(msTime > maiorValorY)
+                        maiorValorY = msTime;
+                    if(msTimeThread > maiorValorY)
+                        maiorValorY = msTimeThread;
+                }
+                else if(ui->eixo_y_forca_radio->isChecked())
+                {
+                    eixoY[i] = SimpleCipher::differencePercentage(mensagem, mensagem_criptografada) * 100;
+                }
+            }
+        }
+    }
+    else if(ui->eixo_x_round_radio->isChecked())
+    {
+        for(int i = 0; i < 100; i++)
+        {
+            //config cipher
+            cipher.setRounds((int)eixoX[i]);
+
+            //timer
+            QElapsedTimer timer;
+            timer.start();
+
+            //encrypt
+            QByteArray mensagem_criptografada = cipher.encrypt(mensagem, chave);
+
+            //timer
+            qint64 elapsedTime = timer.nsecsElapsed();
+            timer.invalidate();
+            double msTime = elapsedTime / 1000.0 / 1000.0;
+
+            //timer2
+            QElapsedTimer timer2;
+            timer2.start();
+
+            //encrypt multithread
+            cipher.encryptMultiThread(mensagem, chave);
+
+            //timer2
+            qint64 elapsedTimeThread = timer2.nsecsElapsed();
+            timer2.invalidate();
+            double msTimeThread = elapsedTimeThread / 1000.0 / 1000.0;
+
+            //armazenando dados
+            if(ui->eixo_y_tempo_radio->isChecked())
+            {
+                eixoY[i] = msTime;
+                eixoYMultiThread[i] = msTimeThread;
+                if(msTime > maiorValorY)
+                    maiorValorY = msTime;
+                if(msTimeThread > maiorValorY)
+                    maiorValorY = msTimeThread;
+            }
+            else if(ui->eixo_y_forca_radio->isChecked())
+            {
+                eixoY[i] = SimpleCipher::differencePercentage(mensagem, mensagem_criptografada) * 100;
+            }
+        }
+    }
+
+    //colocar dados no grafico
+    plot->addGraph();
+    plot->graph(0)->setData(eixoX, eixoY);
+    plot->xAxis->setRange(2, 100);
+    if(ui->eixo_y_forca_radio->isChecked()) plot->yAxis->setRange(2, 100);
+    else plot->yAxis->setRange(0, maiorValorY);
+    plot->graph(0)->setPen(QPen(Qt::blue, 2, Qt::SolidLine, Qt::SquareCap, Qt::RoundJoin));
+    if(ui->eixo_y_tempo_radio->isChecked())
+    {
+        plot->addGraph();
+        plot->graph(1)->setData(eixoX, eixoYMultiThread);
+        plot->yAxis->setRange(0, maiorValorY);
+        plot->graph(1)->setPen(QPen(Qt::red, 2, Qt::SolidLine, Qt::SquareCap, Qt::RoundJoin));
+    }
+    plot->replot();
+
+    //colocar parametros de volta
+    cipher.setBlockSize(ui->block_size_spin->value());
+    cipher.setRounds(ui->rounds_spin->value());
 }

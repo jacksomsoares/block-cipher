@@ -17,11 +17,21 @@ char resetBit(char valor, int posicao)
 
 SimpleCipher::SimpleCipher()
 {
-    TAM_BLOCO = 4;
+    TAM_BLOCO = 8;
     TAM_CHAVE = 4;
     DRIFT_PERM_INI = 3;
     DRIFT_PERM_FIN = 3;
     QTD_ROUNDS = 10;
+}
+
+int SimpleCipher::getBlockSize()
+{
+    return TAM_BLOCO;
+}
+
+int SimpleCipher::getRounds()
+{
+    return QTD_ROUNDS;
 }
 
 void SimpleCipher::setBlockSize(int blockSize)

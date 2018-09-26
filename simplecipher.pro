@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui widgets
+QT       += core gui widgets printsupport
 
 TARGET = simplecipher
 TEMPLATE = app
@@ -25,11 +25,13 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    simplecipher.cpp
+    simplecipher.cpp \
+    qcustomplot.cpp
 
 HEADERS += \
         mainwindow.h \
-    simplecipher.h
+    simplecipher.h \
+    qcustomplot.h
 
 FORMS += \
         mainwindow.ui

@@ -22,6 +22,10 @@ public:
     //construtor
     SimpleCipher();
 
+    //informacoes
+    int getBlockSize();
+    int getRounds();
+
     //configuracoes
     void setBlockSize(int blockSize);
     void setRounds(int rounds);

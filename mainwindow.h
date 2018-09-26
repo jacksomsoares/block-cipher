@@ -31,18 +31,13 @@ private slots:
 
     void on_criptografar_button_pressed();
     void printLog(QString log);
-
     void on_descriptografar_button_pressed();
-
     void on_aplicar_config_button_pressed();
-
     void on_criptografar_multithread_button_pressed();
-
     void on_chave_line_textEdited(const QString &arg1);
-
     void on_chave_hexadecimal_line_textEdited(const QString &arg1);
-
     void on_block_size_spin_valueChanged(int arg1);
+    void on_plot_button_pressed();
 
 private:
     Ui::MainWindow *ui;
