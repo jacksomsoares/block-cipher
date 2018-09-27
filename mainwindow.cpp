@@ -207,6 +207,17 @@ void MainWindow::on_plot_button_pressed()
     QByteArray mensagem = ui->mensagem_plaintext->toPlainText().toLatin1();
     QByteArray chave = ui->chave_line->text().toLatin1();
 
+    int v = 0;
+    //warm-up
+    for(int i = 0; i < 20; i++)
+    {
+        QByteArray mensagem_criptografada = cipher.encrypt(mensagem, chave);
+        v += mensagem_criptografada.size();
+        mensagem_criptografada = cipher.encryptMultiThread(mensagem, chave);
+        v += mensagem_criptografada.size();
+    }
+    qDebug() << v;
+
     //verificar opcoes escolhidas
     if(ui->eixo_x_block_radio->isChecked())
     {
