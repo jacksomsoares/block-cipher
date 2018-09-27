@@ -12,6 +12,7 @@
 #include <QTime>
 #include <QElapsedTimer>
 #include <QScrollBar>
+#include <cmath>
 
 #include "simplecipher.h"
 
@@ -31,6 +32,7 @@ private slots:
 
     void on_criptografar_button_pressed();
     void printLog(QString log);
+    void calculateMaxMinEncripyPower(QVector<double> y, QVector<double> x);
     void on_descriptografar_button_pressed();
     void on_aplicar_config_button_pressed();
     void on_criptografar_multithread_button_pressed();

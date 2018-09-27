@@ -24,6 +24,50 @@ void MainWindow::printLog(QString log)
     //ui->log_plaintext->verticalScrollBar()->setValue(ui->log_plaintext->verticalScrollBar()->maximum());
 }
 
+void MainWindow::calculateMaxMinEncripyPower(QVector<double> x, QVector<double> y)
+{
+    double max = y[2];
+    double min = y[2];
+    double sum = 0;
+
+    double idealPrecision = 50.0;
+    double distance = std::abs(y[2] - idealPrecision);
+
+    double maxX = x[2];
+    double minX = x[2];
+    double idealX = x[2];
+    double idealY = y[2];
+
+    for(int i = 3; i<y.size(); i++)
+    {
+        double iDistance = std::abs(y[i] - idealPrecision);
+        if (iDistance < distance) {
+            idealX = x[i];
+            idealY = y[i];
+            distance = iDistance;
+        }
+
+        if (y[i] > max){
+            max = y[i];
+            maxX = x[i];
+        }
+        if (y[i] < min){
+            min = y[i];
+            minX = x[i];
+        }
+
+        sum += y[i];
+    }
+
+    printLog("Valor Máximo " + QString::number(max) + "% Eixo X: " + QString::number(maxX));
+    printLog("Valor Minimo " + QString::number(min) + "% Eixo X: " + QString::number(minX));
+    printLog("Média " + QString::number(sum/(y.size() - 3)) + "%");
+    printLog("Tamanho ideal: " + QString::number(idealX) + " Com precisão de: " + QString::number(idealY));
+    printLog("\n");
+
+
+}
+
 void MainWindow::on_criptografar_button_pressed()
 {
     printLog("criptografar_button pressionado");
@@ -223,6 +267,7 @@ void MainWindow::on_plot_button_pressed()
                 }
             }
         }
+
     }
     else if(ui->eixo_x_round_radio->isChecked())
     {
@@ -271,6 +316,8 @@ void MainWindow::on_plot_button_pressed()
             }
         }
     }
+
+    calculateMaxMinEncripyPower(eixoX, eixoY);
 
     //colocar dados no grafico
     plot->addGraph();
