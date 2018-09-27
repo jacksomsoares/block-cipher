@@ -197,6 +197,7 @@ QByteArray SimpleCipher::simpleResize(QByteArray input, int size)
     while(output.size() < size) //colocar TAM_BLOCO?
     {
         output.append(input.at(i%input.size()));
+        i++;
     }
     return output;
 }
@@ -232,16 +233,13 @@ QByteArray SimpleCipher::functionF(QByteArray halfBlock, QByteArray key)
 
 QByteArray SimpleCipher::cipherRound(QByteArray block, QByteArray key)
 {
-    //preparar chave
-    QByteArray resizedKey = prepareKey(key);
-
     //separar bloco em duas partes
     QByteArray left;
     QByteArray right;
     left = block.left(block.size()/2);
     right = block.right(block.size()/2);
 
-    QByteArray temp = functionF(right, resizedKey);
+    QByteArray temp = functionF(right, key);
 
     //operacoes bit a bit
     for(int pos = 0; pos < TAM_BLOCO/2; pos++)
@@ -262,16 +260,13 @@ QByteArray SimpleCipher::cipherRound(QByteArray block, QByteArray key)
 
 QByteArray SimpleCipher::decipherRound(QByteArray block, QByteArray key)
 {
-    //preparar chave
-    QByteArray resizedKey = prepareKey(key);
-
     //separar bloco em duas partes
     QByteArray left;
     QByteArray right;
     left = block.left(block.size()/2);
     right = block.right(block.size()/2);
 
-    QByteArray temp = functionF(left, resizedKey);
+    QByteArray temp = functionF(left, key);
 
     //operacoes bit a bit
     for(int pos = 0; pos < TAM_BLOCO/2; pos++)
@@ -292,6 +287,9 @@ QByteArray SimpleCipher::decipherRound(QByteArray block, QByteArray key)
 
 QByteArray SimpleCipher::encrypt(QByteArray input, QByteArray key)
 {
+    //preparar chave
+    QByteArray resizedKey = prepareKey(key);
+
     //quebrar em blocos
     QList<QByteArray> blockList = breakIntoBlocks(input);
 
@@ -305,7 +303,7 @@ QByteArray SimpleCipher::encrypt(QByteArray input, QByteArray key)
         //numero de rounds
         for (int round = 0; round < QTD_ROUNDS; round++)
         {
-            block = cipherRound(block, key);
+            block = cipherRound(block, resizedKey);
         }
         cipherBlockList.append(block);
     }
@@ -336,6 +334,9 @@ QByteArray SimpleCipher::encryptThread(QByteArray input, QByteArray key)
 
 QByteArray SimpleCipher::encryptMultiThread(QByteArray input, QByteArray key)
 {
+    //preparar chave
+    QByteArray resizedKey = prepareKey(key);
+
     //quebrar em blocos
     QList<QByteArray> blockList = breakIntoBlocks(input);
 
@@ -346,22 +347,25 @@ QByteArray SimpleCipher::encryptMultiThread(QByteArray input, QByteArray key)
         asyncVector.push_back(std::async(std::launch::async, [](SimpleCipher* cipher, QByteArray input, QByteArray key)
         {
             return cipher->encryptThread(input, key);
-        }, this, block, key));
+        }, this, block, resizedKey));
     }
 
+    //join das threads
     QList<QByteArray> cipherBlockList;
-
     for(unsigned int i = 0; i < asyncVector.size(); i++)
     {
         cipherBlockList.append(asyncVector.at(i).get());
     }
 
-    //juntar mensagem e returnar
+    //juntar mensagem e retornar
     return joinBlocks(cipherBlockList);
 }
 
 QByteArray SimpleCipher::decrypt(QByteArray input, QByteArray key)
 {
+    //preparar chave
+    QByteArray resizedKey = prepareKey(key);
+
     //quebrar em blocos
     QList<QByteArray> blockList = breakIntoBlocks(input);
 
@@ -375,7 +379,7 @@ QByteArray SimpleCipher::decrypt(QByteArray input, QByteArray key)
         //numero de rounds
         for (int round = 0; round < QTD_ROUNDS; round++)
         {
-            block = decipherRound(block, key);
+            block = decipherRound(block, resizedKey);
         }
         cipherBlockList.append(block);
     }

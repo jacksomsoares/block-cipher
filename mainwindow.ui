@@ -34,7 +34,7 @@
            <item>
             <widget class="QPlainTextEdit" name="mensagem_plaintext">
              <property name="plainText">
-              <string>The quick brown fox jumps over the lazy dog</string>
+              <string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vitae arcu maximus, cursus metus vel, consectetur ipsum. Duis consectetur eros et accumsan commodo. Duis quis nulla urna. Nam venenatis, ligula a iaculis placerat, dolor velit eleifend dolor, non imperdiet risus diam quis diam. Maecenas vel elit sem. Etiam risus metus, vulputate non metus sed, facilisis placerat augue. Praesent a vulputate purus, eget iaculis sapien. Sed porta, metus non consectetur lobortis, erat nibh hendrerit velit, at luctus magna nunc eget arcu. Etiam imperdiet ante ac turpis imperdiet, eget sodales ex ornare. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Pellentesque ullamcorper eros sit amet felis tempus, non iaculis odio molestie. Morbi interdum sodales mattis. Praesent sodales nunc sit amet pretium ornare. Phasellus efficitur turpis tincidunt sollicitudin ornare. Vivamus consequat facilisis sem a sollicitudin.</string>
              </property>
             </widget>
            </item>
@@ -300,30 +300,6 @@
            </size>
           </property>
          </spacer>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout">
-          <item>
-           <spacer name="horizontalSpacer">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="QPushButton" name="aplicar_config_button">
-            <property name="text">
-             <string>Aplicar alterações</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
         </item>
        </layout>
       </widget>

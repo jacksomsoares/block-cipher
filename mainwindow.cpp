@@ -9,8 +9,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     ui->block_size_spin->setValue(cipher.getBlockSize());
     ui->rounds_spin->setValue(cipher.getRounds());
-
-    //qDebug() << SimpleCipher::differencePercentage(QByteArray(8, (char)15), QByteArray(8, (char)255))*100;
 }
 
 MainWindow::~MainWindow()
@@ -21,10 +19,9 @@ MainWindow::~MainWindow()
 void MainWindow::printLog(QString log)
 {
     ui->log_plaintext->appendPlainText(log);
-    //ui->log_plaintext->verticalScrollBar()->setValue(ui->log_plaintext->verticalScrollBar()->maximum());
 }
 
-void MainWindow::calculateMaxMinEncripyPower(QVector<double> x, QVector<double> y)
+void MainWindow::calculateMaxMinEncriptPower(QVector<double> x, QVector<double> y)
 {
     double max = y[2];
     double min = y[2];
@@ -63,9 +60,7 @@ void MainWindow::calculateMaxMinEncripyPower(QVector<double> x, QVector<double> 
     printLog("Valor Minimo " + QString::number(min) + "% Eixo X: " + QString::number(minX));
     printLog("Média " + QString::number(sum/(y.size() - 3)) + "%");
     printLog("Tamanho ideal: " + QString::number(idealX) + " Com precisão de: " + QString::number(idealY));
-    printLog("\n");
-
-
+    printLog("");
 }
 
 void MainWindow::on_criptografar_button_pressed()
@@ -75,6 +70,9 @@ void MainWindow::on_criptografar_button_pressed()
     //mensagem e chave
     QByteArray mensagem = ui->mensagem_plaintext->toPlainText().toLatin1();
     QByteArray chave = ui->chave_line->text().toLatin1();
+
+    //print chave
+    printLog("chave utilizada: " + cipher.prepareKey(chave).toHex());
 
     //timer
     QElapsedTimer timer;
@@ -160,15 +158,6 @@ void MainWindow::on_descriptografar_button_pressed()
     printLog("");
 }
 
-void MainWindow::on_aplicar_config_button_pressed()
-{
-    cipher.setBlockSize(ui->block_size_spin->value());
-    cipher.setRounds(ui->rounds_spin->value());
-    ui->encriptado_hexadecimal_plaintext->clear();
-    ui->mensagem_encriptada_hexadecimal_plaintext->clear();
-    printLog("novas configurações aplicadas!\n");
-}
-
 void MainWindow::on_chave_line_textEdited(const QString &arg1)
 {
     ui->chave_hexadecimal_line->setText(arg1.toLatin1().toHex());
@@ -182,11 +171,21 @@ void MainWindow::on_chave_hexadecimal_line_textEdited(const QString &arg1)
 void MainWindow::on_block_size_spin_valueChanged(int arg1)
 {
     ui->key_size_spin->setValue(arg1/2);
+    cipher.setBlockSize(arg1);
+    ui->encriptado_hexadecimal_plaintext->clear();
+    ui->mensagem_encriptada_hexadecimal_plaintext->clear();
+}
+
+void MainWindow::on_rounds_spin_valueChanged(int arg1)
+{
+    cipher.setRounds(arg1);
+    ui->encriptado_hexadecimal_plaintext->clear();
+    ui->mensagem_encriptada_hexadecimal_plaintext->clear();
 }
 
 void MainWindow::on_plot_button_pressed()
 {
-    printLog("plot_button pressionado\n");
+    printLog("plot_button pressionado");
 
     //limpar grafico anterior
     QCustomPlot* plot = ui->custom_plot_widget;
@@ -317,7 +316,7 @@ void MainWindow::on_plot_button_pressed()
         }
     }
 
-    calculateMaxMinEncripyPower(eixoX, eixoY);
+    calculateMaxMinEncriptPower(eixoX, eixoY);
 
     //colocar dados no grafico
     plot->addGraph();

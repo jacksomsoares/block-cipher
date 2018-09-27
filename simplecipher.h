@@ -41,6 +41,9 @@ public:
     //funcao comparacao
     static double differencePercentage(QByteArray input1, QByteArray input2);
 
+    //chave
+    QByteArray prepareKey(QByteArray input);
+
 private:
     //gerar/juntar lista de blocos
     QList<QByteArray> breakIntoBlocks(QByteArray input);
@@ -60,7 +63,6 @@ private:
 
     //expandir chave
     QByteArray simpleResize(QByteArray input, int size);
-    QByteArray prepareKey(QByteArray input);
 
     //aplicar uma 'rodada'
     QByteArray cipherRound(QByteArray block, QByteArray key);
